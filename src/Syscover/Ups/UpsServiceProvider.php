@@ -1,4 +1,4 @@
-<?php namespace Syscover\ShoppingCart;
+<?php namespace Syscover\Ups;
 
 use Illuminate\Support\ServiceProvider;
 
