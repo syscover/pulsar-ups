@@ -24,10 +24,7 @@
         "laravel": {
             "providers": [
                 "Syscover\\Ups\\UpsServiceProvider"
-            ],
-            "aliases": {
-                "Ups": "Syscover\\Ups\\Facades\\Ups"
-            }
+            ]
         }
     }
 }
