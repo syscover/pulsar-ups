@@ -12,7 +12,7 @@ use Ups\Entity\UnitOfMeasurement;
 
 class RateService
 {
-    public static function getRateCP($countryFrom, $cpFrom, $countryTo, $cpTo, $weight, $width, $height, $length)
+    public static function getRate($countryFrom, $cpFrom, $countryTo, $cpTo, $weight, $width, $height, $length)
     {
         // FROM
         // create address from
