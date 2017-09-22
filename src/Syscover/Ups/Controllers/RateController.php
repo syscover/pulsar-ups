@@ -9,7 +9,7 @@ class RateController extends BaseController
 {
     public function index(Request $request)
     {
-        $response = RateService::getRateCP(
+        $response = RateService::getRate(
             'ES',
             '20820',
             'ES',
