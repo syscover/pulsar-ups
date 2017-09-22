@@ -12,7 +12,7 @@ use Ups\Entity\UnitOfMeasurement;
 
 class RateService
 {
-    public static function getRate($countryFrom, $cpFrom, $countryTo, $cpTo, $weight, $width, $height, $length)
+    public static function getRate($countryFrom, $cpFrom, $countryTo, $cpTo, $weight)
     {
         // FROM
         // create address from
@@ -53,17 +53,17 @@ class RateService
         $package->getPackageWeight()->setUnitOfMeasurement($weightUnit);
 
         // DIMENSIONS
-        $dimensions = new Dimensions();
-        $dimensions->setWidth($width);
-        $dimensions->setHeight($height);
-        $dimensions->setLength($length);
+        //$dimensions = new Dimensions();
+        //$dimensions->setWidth($width);
+        //$dimensions->setHeight($height);
+        //$dimensions->setLength($length);
 
         // set units dimensions
-        $sizeUnit = new UnitOfMeasurement;
-        $sizeUnit->setCode(UnitOfMeasurement::UOM_CM);
-        $dimensions->setUnitOfMeasurement($sizeUnit);
+        //$sizeUnit = new UnitOfMeasurement;
+        //$sizeUnit->setCode(UnitOfMeasurement::UOM_CM);
+        //$dimensions->setUnitOfMeasurement($sizeUnit);
 
-        $package->setDimensions($dimensions);
+        //$package->setDimensions($dimensions);
 
         // SET SHIPMENT
         $shipment->addPackage($package);
