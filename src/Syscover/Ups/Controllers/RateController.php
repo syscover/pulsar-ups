@@ -11,15 +11,12 @@ class RateController extends BaseController
     {
         $response = RateService::getRate(
             'ES',
-            '20820',
+            '28020',
             'ES',
             '28034',
-            0.200,
-            3.5,
-            20.5,
-            4.5
+            0.2
         );
 
-        return response()->json($response);
+        return response($response);
     }
 }

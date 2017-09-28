@@ -11,8 +11,8 @@ return [
     | .env & .env.example file.
     |
     */
-    'access_key' => env('UPS_ACCESS_KEY', 'test'),
-    'user_id'    => env('UPS_USER_ID', 'test'),
-    'password'   => env('UPS_PASSWORD', 'test'),
-    'sandbox'    => env('UPS_SANDBOX', true),
+    'access_key'    => env('UPS_ACCESS_KEY', 'test'),
+    'user'          => env('UPS_USER', 'test'),
+    'password'      => env('UPS_PASSWORD', 'test'),
+    'sandbox'       => env('UPS_SANDBOX', true),
 ];

@@ -27,6 +27,22 @@ class UpsServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-
+        $this->registerRate();
 	}
+
+    /**
+     * Register the Rate class.
+     *
+     * @return void
+     */
+    protected function registerRate()
+    {
+        $this->app->singleton('ups.rate', function () {
+            return new Rate(
+                config('pulsar-ups.user'),
+                config('pulsar-ups.password'),
+                config('pulsar-ups.access_key')
+            );
+        });
+    }
 }

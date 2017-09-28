@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=7.0.0",
-        "ptondereau/laravel-ups-api": "^1.0"
+        "guzzlehttp/guzzle": "~6.0"
     },
     "autoload": {
         "psr-4": {
