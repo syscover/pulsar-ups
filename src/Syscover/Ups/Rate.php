@@ -1,10 +1,7 @@
 <?php namespace Syscover\Ups;
 
-class Rate {
+class Rate extends Ups {
 
-    private $user;
-    private $password;
-    private $accessKey;
     private $request = [];
 
     public function __construct(
@@ -13,9 +10,7 @@ class Rate {
         string $accessKey
     )
     {
-        $this->user = $user;
-        $this->password = $password;
-        $this->accessKey = $accessKey;
+        parent::__construct($user, $password, $accessKey);
     }
 
     public function addUpsSecurity()
@@ -109,7 +104,7 @@ class Rate {
         $client = new \GuzzleHttp\Client();
 
         $response = $client->post(
-            'https://wwwcie.ups.com/rest/Rate',
+            config('pulsar-ups.sandbox') ? self::SANDBOX_ENDPOINT : self::PRODUCTION_ENDPOINT . 'rest/Rate',
             [
                 'json' => $this->request,
                 'headers' => [
@@ -118,9 +113,9 @@ class Rate {
                     'Access-Control-Allow-Origin'   => '*',
                     'Content-Type'                  => 'application/json'
                 ],
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'http_errors' => true
+                'Accept'        => 'application/json',
+                'Content-Type'  => 'application/json',
+                'http_errors'   => true
             ]
         );
 
