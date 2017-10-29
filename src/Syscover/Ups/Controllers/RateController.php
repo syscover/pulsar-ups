@@ -14,7 +14,7 @@ class RateController extends BaseController
             '28020',
             'ES',
             '28034',
-            0.2
+            '0.2'
         );
 
         return response($response);

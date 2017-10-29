@@ -19,11 +19,11 @@ class RateService
         Rate::addUpsSecurity()
             ->addRequest()
             ->addShipper()
-            ->addShippTo()
-            ->addShippFrom()
+            ->addShipFrom($countryFrom, $cpFrom)
+            ->addShipTo($countryTo, $cpTo)
             ->addService()
             ->addPackage()
-            ->addPackageWeight()
+            ->addPackageWeight($weight)
             ->addShipmentRatingOptions();
 
 

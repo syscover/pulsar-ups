@@ -1,12 +1,24 @@
 <?php namespace Syscover\Ups;
 
-abstract class Ups {
-
-    protected $user;
-    protected $password;
-    protected $accessKey;
+abstract class Ups
+{
     const PRODUCTION_ENDPOINT = 'https://onlinetools.ups.com/';
     const SANDBOX_ENDPOINT = 'https://wwwcie.ups.com/';
+
+    /**
+     * @var string
+     */
+    protected $user;
+
+    /**
+     * @var string
+     */
+    protected $password;
+
+    /**
+     * @var string
+     */
+    protected $accessKey;
 
     public function __construct(
         string $user,

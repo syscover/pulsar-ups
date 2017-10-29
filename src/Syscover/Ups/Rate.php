@@ -1,7 +1,16 @@
 <?php namespace Syscover\Ups;
 
-class Rate extends Ups {
+use Syscover\Ups\Entities\PackagingType;
+use Syscover\Ups\Entities\Service;
+use Syscover\Ups\Entities\UnitOfMeasurement;
 
+class Rate extends Ups
+{
+    const ENDPOINT = '/Rate';
+
+    /**
+     * @var array
+     */
     private $request = [];
 
     public function __construct(
@@ -22,15 +31,15 @@ class Rate extends Ups {
         return $this;
     }
 
-    public function addRequest()
+    public function addRequest($requestOption = 'Rate', $customerContext = 'UPS API Rate')
     {
-        $this->request['RateRequest']['Request']['RequestOption'] = 'Rate';
-        $this->request['RateRequest']['Request']['TransactionReference']['CustomerContext'] = 'Your Access Context';
+        $this->request['RateRequest']['Request']['RequestOption'] = $requestOption;
+        $this->request['RateRequest']['Request']['TransactionReference']['CustomerContext'] = $customerContext;
 
         return $this;
     }
 
-    public function addShipper()
+    public function addShipper($name = null)
     {
         $this->request['RateRequest']['Shipment']['Shipper']['Name'] = 'XFEAT';
         $this->request['RateRequest']['Shipment']['Shipper']['ShipperNumber'] = $this->user;
@@ -41,48 +50,45 @@ class Rate extends Ups {
         return $this;
     }
 
-    public function addShippTo()
+    public function addShipTo($country, $cp)
     {
         $this->request['RateRequest']['Shipment']['ShipTo']['Name'] = 'Carlos';
         $this->request['RateRequest']['Shipment']['ShipTo']['Address']['AddressLine'] = ['Calle antonio de cabezón 83'];
-        $this->request['RateRequest']['Shipment']['ShipTo']['Address']['PostalCode'] = '28034';
-        $this->request['RateRequest']['Shipment']['ShipTo']['Address']['CountryCode'] = 'ES';
-
-        //$this->request['RateRequest']['Shipment']['ShipTo']['Address']['PostalCode'] = '75014';
-        //$this->request['RateRequest']['Shipment']['ShipTo']['Address']['CountryCode'] = 'FR';
+        $this->request['RateRequest']['Shipment']['ShipTo']['Address']['PostalCode'] = $cp;
+        $this->request['RateRequest']['Shipment']['ShipTo']['Address']['CountryCode'] = $country;
 
         return $this;
     }
 
-    public function addShippFrom()
+    public function addShipFrom($country, $cp)
     {
         $this->request['RateRequest']['Shipment']['ShipFrom']['Name'] = 'XFEAT';
         $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['AddressLine'] = ['Calle orense 69'];
-        $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['PostalCode'] = '28020';
-        $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['CountryCode'] = 'ES';
+        $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['PostalCode'] = $cp;
+        $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['CountryCode'] = $country;
 
         return $this;
     }
 
-    public function addService()
+    public function addService($code = Service::S_STANDARD)
     {
-        $this->request['RateRequest']['Shipment']['Service']['Code'] = ['11'];
+        $this->request['RateRequest']['Shipment']['Service']['Code'] = [$code];
 
         return $this;
     }
 
-    public function addPackage()
+    public function addPackage($code = PackagingType::PT_UNKNOWN)
     {
-        $this->request['RateRequest']['Shipment']['Package']['PackagingType']['Code'] = ['00'];
+        $this->request['RateRequest']['Shipment']['Package']['PackagingType']['Code'] = [$code];
 
         return $this;
     }
 
-    public function addPackageWeight()
+    public function addPackageWeight($weight, $code = UnitOfMeasurement::UOM_KGS)
     {
-        $this->request['RateRequest']['Shipment']['Package']['PackageWeight']['UnitOfMeasurement']['Code'] = 'KGS';
-        $this->request['RateRequest']['Shipment']['Package']['PackageWeight']['UnitOfMeasurement']['Description'] = 'Kilos';
-        $this->request['RateRequest']['Shipment']['Package']['PackageWeight']['Weight'] = '0.2';
+        $this->request['RateRequest']['Shipment']['Package']['PackageWeight']['UnitOfMeasurement']['Code'] = $code;
+        //$this->request['RateRequest']['Shipment']['Package']['PackageWeight']['UnitOfMeasurement']['Description'] = 'Kilos';
+        $this->request['RateRequest']['Shipment']['Package']['PackageWeight']['Weight'] = $weight;
 
         return $this;
     }
