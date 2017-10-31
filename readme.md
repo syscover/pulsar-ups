@@ -10,3 +10,8 @@
 ```
 composer require syscover/pulsar-ups
 ```
+
+**2 - Execute publish command**
+```
+php artisan vendor:publish --provider="Syscover\Ups\UpsServiceProvider"
+```
