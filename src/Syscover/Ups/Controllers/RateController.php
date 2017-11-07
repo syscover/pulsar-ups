@@ -7,7 +7,7 @@ use Syscover\Ups\Services\RateService;
 
 class RateController extends BaseController
 {
-    public function index(Request $request)
+    public function index()
     {
         $response = RateService::getRate(
             'ES',

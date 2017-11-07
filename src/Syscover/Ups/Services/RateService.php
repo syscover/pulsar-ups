@@ -1,16 +1,6 @@
 <?php namespace Syscover\Ups\Services;
 
 use Syscover\Ups\Facades\Rate;
-//use Ups\Entity\Address;
-//use Ups\Entity\Dimensions;
-//use Ups\Entity\Package;
-//use Ups\Entity\PackagingType;
-//use Ups\Entity\ShipFrom;
-//use Ups\Entity\ShipTo;
-//use Ups\Entity\Shipment;
-//use Ups\Entity\UnitOfMeasurement;
-//use Ups\Rate;
-
 
 class RateService
 {
@@ -25,10 +15,6 @@ class RateService
             ->addPackage()
             ->addPackageWeight($weight)
             ->addShipmentRatingOptions();
-
-
-        //return json_encode(Rate::request());
-
 
         return Rate::send();
 
