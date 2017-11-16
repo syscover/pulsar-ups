@@ -4,13 +4,21 @@ use Syscover\Ups\Facades\Rate;
 
 class RateService
 {
-    public static function getRate($countryFrom, $cpFrom, $countryTo, $cpTo, $weight)
+    public static function getRate(
+        $countryFrom,
+        $cpFrom,
+        $countryTo,
+        $cpTo,
+        $weight)
     {
         Rate::addUpsSecurity()
             ->addRequest()
             ->addShipper()
             ->addShipFrom($countryFrom, $cpFrom)
-            ->addShipTo($countryTo, $cpTo)
+            ->addShipTo(
+                $countryTo,
+                $cpTo
+            )
             ->addService()
             ->addPackage()
             ->addPackageWeight($weight)
