@@ -9,23 +9,31 @@ class RateService
         $cpFrom,
         $countryTo,
         $cpTo,
-        $weight)
+        $weight
+    )
     {
-        Rate::addUpsSecurity()
+
+
+        return Rate::addUpsSecurity()
             ->addRequest()
             ->addShipper()
-            ->addShipFrom($countryFrom, $cpFrom)
+            ->addShipFrom(
+                $countryFrom,
+                $cpFrom
+            )
             ->addShipTo(
                 $countryTo,
                 $cpTo
             )
             ->addService()
             ->addPackage()
-            ->addPackageWeight($weight)
-            ->addShipmentRatingOptions();
+            ->addPackageWeight(
+                $weight
+            )
+            ->addShipmentRatingOptions()->send();
 
-        return Rate::send();
-
+        //return Rate::send();
+        //return json_encode(Rate::request());
 
 
 

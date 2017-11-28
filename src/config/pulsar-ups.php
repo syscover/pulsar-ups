@@ -15,4 +15,25 @@ return [
     'user'          => env('UPS_USER', 'test'),
     'password'      => env('UPS_PASSWORD', 'test'),
     'sandbox'       => env('UPS_SANDBOX', true),
+
+
+    'country_codes' => [
+        'ES' => [
+            '35***' => 'IC',
+            '38***' => 'IC',
+        ]
+    ],
+
+    'services' => [
+        'IC' => [
+            '65' => ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true]
+        ],
+        'US' => [
+            ['code' => '07',    'name' =>'UPS Express',                        'saver' => false],
+            ['code' => '08',    'name' =>'UPS Expedited',                      'saver' => false],
+            ['code' => '54',    'name' =>'UPS Express Plus',                   'saver' => false],
+            ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true],
+            ['code' => '96',    'name' =>'UPS Worldwide Express Freight',      'saver' => false]
+        ]
+    ],
 ];

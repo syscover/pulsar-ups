@@ -50,32 +50,46 @@ class Rate extends Ups
         return $this;
     }
 
+    public function addShipFrom($countryCode, $postalCode, $name = null, $address = null, $city = null, $stateProvinceCode = null)
+    {
+        if($name)                           $this->request['RateRequest']['Shipment']['ShipFrom']['Name'] = $name;
+        if($address)                        $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['AddressLine'] = [$address];
+        if($city)                           $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['City'] = $city;
+        if($stateProvinceCode)              $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['StateProvinceCode'] = $stateProvinceCode;
+                                            $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['PostalCode'] = $postalCode;
+                                            $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['CountryCode'] = $this->checkSpecialCountryCode($countryCode, $postalCode);
+
+        return $this;
+    }
+
     public function addShipTo($countryCode, $postalCode, $name = null, $address = null, $city = null, $stateProvinceCode = null, $residentialAddressIndicator = null)
     {
-        if($name) $this->request['RateRequest']['Shipment']['ShipTo']['Name'] = $name;
-        if($address) $this->request['RateRequest']['Shipment']['ShipTo']['Address']['AddressLine'] = [$address];
-        if($city) $this->request['RateRequest']['Shipment']['ShipTo']['Address']['City'] = $city;
-        if($stateProvinceCode) $this->request['RateRequest']['Shipment']['ShipTo']['Address']['StateProvinceCode'] = $stateProvinceCode;
-        if($postalCode) $this->request['RateRequest']['Shipment']['ShipTo']['Address']['PostalCode'] = $postalCode;
-        $this->request['RateRequest']['Shipment']['ShipTo']['Address']['CountryCode'] = $countryCode;
-        if($residentialAddressIndicator) $this->request['RateRequest']['Shipment']['ShipTo']['Address']['ResidentialAddressIndicator'] = $residentialAddressIndicator;
+        if($name)                           $this->request['RateRequest']['Shipment']['ShipTo']['Name'] = $name;
+        if($address)                        $this->request['RateRequest']['Shipment']['ShipTo']['Address']['AddressLine'] = [$address];
+        if($city)                           $this->request['RateRequest']['Shipment']['ShipTo']['Address']['City'] = $city;
+        if($stateProvinceCode)              $this->request['RateRequest']['Shipment']['ShipTo']['Address']['StateProvinceCode'] = $stateProvinceCode;
+        if($residentialAddressIndicator)    $this->request['RateRequest']['Shipment']['ShipTo']['Address']['ResidentialAddressIndicator'] = $residentialAddressIndicator;
+                                            $this->request['RateRequest']['Shipment']['ShipTo']['Address']['PostalCode'] = $postalCode;
+                                            $this->request['RateRequest']['Shipment']['ShipTo']['Address']['CountryCode'] = $this->checkSpecialCountryCode($countryCode, $postalCode);
 
         return $this;
     }
 
-    public function addShipFrom($country, $cp)
+    public function addService($serviceCode = Service::S_STANDARD)
     {
-        $this->request['RateRequest']['Shipment']['ShipFrom']['Name'] = 'XFEAT';
-        $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['AddressLine'] = ['Calle orense 69'];
-        $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['PostalCode'] = $cp;
-        $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['CountryCode'] = $country;
+        if($this->request['RateRequest']['Shipment']['ShipTo']['Address']['CountryCode'])
+        {
+            if(! $this->isServiceAllowed($serviceCode, $this->request['RateRequest']['Shipment']['ShipTo']['Address']['CountryCode']))
+            {
+                $serviceCode = $this->getSaverService($this->request['RateRequest']['Shipment']['ShipTo']['Address']['CountryCode']);
+            }
+        }
+        else
+        {
+            throw new \Exception('ShipTo country code must be defined');
+        }
 
-        return $this;
-    }
-
-    public function addService($code = Service::S_STANDARD)
-    {
-        $this->request['RateRequest']['Shipment']['Service']['Code'] = [$code];
+        $this->request['RateRequest']['Shipment']['Service']['Code'] = [$serviceCode];
 
         return $this;
     }
@@ -131,5 +145,65 @@ class Rate extends Ups
         return $response
             ->getBody()
             ->getContents();
+    }
+
+    private function checkSpecialCountryCode($countryId, $postalCode)
+    {
+        // get countries from special countries table
+        $country = collect(config('pulsar-ups.country_codes'))->get($countryId);
+
+        if(is_array($country))
+        {
+            $cpPattern = $postalCode;
+            for ($i = strlen($postalCode); $i > 0; $i--)
+            {
+                $cpPattern = substr_replace($cpPattern,'*', $i-1, 1);
+                if(array_key_exists($cpPattern, $country))
+                {
+                   return $country[$cpPattern];
+                }
+            }
+        }
+
+        return $countryId;
+    }
+
+    private function getSaverService($countryId)
+    {
+        // get countries from special countries table
+        $countryServices = collect(config('pulsar-ups.services'))->get($countryId);
+
+        if(is_array($countryServices))
+        {
+            $saverService = collect($countryServices)->where('saver', true)->first();
+
+            if($saverService)
+                if(isset($saverService['code']))
+                    return $saverService['code'];
+                else
+                    throw new \Exception('Code parameter must be defined in config pulsar-ups.services');
+            else
+                return null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if service is allowed for ShipTo country code
+     *
+     * @param $serviceCode
+     * @param $countryId
+     * @return bool
+     */
+    private function isServiceAllowed($serviceCode, $countryId)
+    {
+        // get countries from special countries table
+        $countryServices = collect(config('pulsar-ups.services'))->get($countryId);
+
+        if(is_array($countryServices))
+            return collect($countryServices)->where('code', $serviceCode)->count() > 0;
+
+        return true;
     }
 }
