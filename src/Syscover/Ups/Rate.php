@@ -149,20 +149,20 @@ class Rate extends Ups
             ->getContents();
     }
 
-    private function checkSpecialCountryCode($countryId, $postalCode)
+    private function checkSpecialCountryCode($countryId, $zip)
     {
         // get countries from special countries table
         $country = collect(config('pulsar-ups.country_codes'))->get($countryId);
 
         if(is_array($country))
         {
-            $cpPattern = $postalCode;
-            for ($i = strlen($postalCode); $i > 0; $i--)
+            $zipPattern = $zip;
+            for ($i = strlen($zip); $i > 0; $i--)
             {
-                $cpPattern = substr_replace($cpPattern,'*', $i-1, 1);
-                if(array_key_exists($cpPattern, $country))
+                $zipPattern = substr_replace($zipPattern,'*', $i-1, 1);
+                if(array_key_exists($zipPattern, $country))
                 {
-                   return $country[$cpPattern];
+                   return $country[$zipPattern];
                 }
             }
         }

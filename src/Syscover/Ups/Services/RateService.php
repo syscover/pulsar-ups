@@ -6,9 +6,9 @@ class RateService
 {
     public static function getRate(
         $countryFrom,
-        $cpFrom,
+        $zipFrom,
         $countryTo,
-        $cpTo,
+        $zipTo,
         $weight
     )
     {
@@ -17,11 +17,11 @@ class RateService
             ->addShipper()
             ->addShipFrom(
                 $countryFrom,
-                $cpFrom
+                $zipFrom
             )
             ->addShipTo(
                 $countryTo,
-                $cpTo
+                $zipTo
             )
             ->addService()
             ->addPackage()
