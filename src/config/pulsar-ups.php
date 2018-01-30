@@ -16,7 +16,7 @@ return [
     'password'      => env('UPS_PASSWORD', 'test'),
     'sandbox'       => env('UPS_SANDBOX', true),
 
-
+    // country codes exceptions to consider
     'country_codes' => [
         'ES' => [
             '35***' => 'IC',    // Islas Canarias
@@ -26,6 +26,7 @@ return [
         ]
     ],
 
+    // in case that a country only has any services availables
     'services' => [
         'IC' => [
             ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true]
@@ -49,6 +50,38 @@ return [
             ['code' => '54',    'name' =>'UPS Express Plus',                   'saver' => false],
             ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true],
             ['code' => '96',    'name' =>'UPS Worldwide Express Freight',      'saver' => false]
+        ],
+        'IS' => [
+            ['code' => '08',    'name' =>'UPS Expedited',                      'saver' => false],
+            ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true]
+        ],
+        'AR' => [
+            ['code' => '08',    'name' =>'UPS Expedited',                      'saver' => false],
+            ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true]
+        ],
+        'BR' => [
+            ['code' => '08',    'name' =>'UPS Expedited',                      'saver' => false],
+            ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true]
+        ],
+        'CL' => [
+            ['code' => '08',    'name' =>'UPS Expedited',                      'saver' => false],
+            ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true]
+        ],
+        'CO' => [
+            ['code' => '08',    'name' =>'UPS Expedited',                      'saver' => false],
+            ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true]
+        ],
+        'NZ' => [
+            ['code' => '08',    'name' =>'UPS Expedited',                      'saver' => false],
+            ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true]
+        ],
+        'AU' => [
+            ['code' => '08',    'name' =>'UPS Expedited',                      'saver' => false],
+            ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true]
+        ],
+        'JP' => [
+            ['code' => '08',    'name' =>'UPS Expedited',                      'saver' => false],
+            ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true]
         ],
     ],
 ];

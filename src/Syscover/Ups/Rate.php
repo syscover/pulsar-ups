@@ -13,6 +13,11 @@ class Rate extends Ups
      */
     private $request = [];
 
+    /**
+     * @var bool
+     */
+    private $debug = false;
+
     public function __construct(
         string $user,
         string $password,
@@ -127,6 +132,8 @@ class Rate extends Ups
     public function send()
     {
         $client = new \GuzzleHttp\Client();
+
+        if($this->debug) return json_encode($this->request);
 
         $response = $client->post(
             config('pulsar-ups.sandbox') ? self::SANDBOX_ENDPOINT : self::PRODUCTION_ENDPOINT . 'rest/Rate',
