@@ -44,7 +44,14 @@ class Rate extends Ups
         return $this;
     }
 
-    public function addShipper($countryCode, $postalCode, $name = null, $address = null, $city = null, $stateProvinceCode = null)
+    public function addShipper(
+        $countryCode,
+        $postalCode,
+        $name = null,
+        $address = null,
+        $city = null,
+        $stateProvinceCode = null
+    )
     {
                                             $this->request['RateRequest']['Shipment']['Shipper']['ShipperNumber'] = $this->user;
         if($name)                           $this->request['RateRequest']['Shipment']['Shipper']['Name'] = $name;
@@ -57,7 +64,14 @@ class Rate extends Ups
         return $this;
     }
 
-    public function addShipFrom($countryCode, $postalCode, $name = null, $address = null, $city = null, $stateProvinceCode = null)
+    public function addShipFrom(
+        $countryCode,
+        $postalCode,
+        $name = null,
+        $address = null,
+        $city = null,
+        $stateProvinceCode = null
+    )
     {
         if($name)                           $this->request['RateRequest']['Shipment']['ShipFrom']['Name'] = $name;
         if($address)                        $this->request['RateRequest']['Shipment']['ShipFrom']['Address']['AddressLine'] = [$address];
@@ -69,7 +83,15 @@ class Rate extends Ups
         return $this;
     }
 
-    public function addShipTo($countryCode, $postalCode, $name = null, $address = null, $city = null, $stateProvinceCode = null, $residentialAddressIndicator = null)
+    public function addShipTo(
+        $countryCode,
+        $postalCode,
+        $name = null,
+        $address = null,
+        $city = null,
+        $stateProvinceCode = null,
+        $residentialAddressIndicator = null
+    )
     {
         if($name)                           $this->request['RateRequest']['Shipment']['ShipTo']['Name'] = $name;
         if($address)                        $this->request['RateRequest']['Shipment']['ShipTo']['Address']['AddressLine'] = [$address];

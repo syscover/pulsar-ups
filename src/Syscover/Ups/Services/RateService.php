@@ -14,7 +14,10 @@ class RateService
     {
         return Rate::addUpsSecurity()
             ->addRequest()
-            ->addShipper()
+            ->addShipper(
+                $countryFrom,
+                $zipFrom
+            )
             ->addShipFrom(
                 $countryFrom,
                 $zipFrom
