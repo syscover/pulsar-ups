@@ -158,7 +158,7 @@ class Rate extends Ups
         if($this->debug) return json_encode($this->request);
 
         $response = $client->post(
-            config('pulsar-ups.sandbox') ? self::SANDBOX_ENDPOINT : self::PRODUCTION_ENDPOINT . 'rest/Rate',
+            (config('pulsar-ups.sandbox') ? self::SANDBOX_ENDPOINT : self::PRODUCTION_ENDPOINT) . 'rest' . self::ENDPOINT,
             [
                 'json' => $this->request,
                 'headers' => [
