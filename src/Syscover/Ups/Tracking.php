@@ -40,7 +40,7 @@ class Tracking extends Ups
         $this->request['TrackRequest']['InquiryNumber'] = $trackingNumber;
         $this->request['TrackRequest']['Locale'] = $locale;
 
-        return json_decode($this->send());
+        return $this->send();
     }
 
     public function request()
