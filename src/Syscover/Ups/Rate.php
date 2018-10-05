@@ -157,7 +157,7 @@ class Rate extends Ups
 
         if($this->debug) return json_encode($this->request);
 
-        $response = $client->post(
+        $data = $client->post(
             (config('pulsar-ups.sandbox') ? self::SANDBOX_ENDPOINT : self::PRODUCTION_ENDPOINT) . 'rest' . self::ENDPOINT,
             [
                 'json' => $this->request,
@@ -173,9 +173,33 @@ class Rate extends Ups
             ]
         );
 
-        return $response
-            ->getBody()
-            ->getContents();
+        $rate = $data->getBody()->getContents();
+
+        // parse string to object
+        $rate = json_decode($rate);
+
+        if(isset($rate->RateResponse->RatedShipment->NegotiatedRateCharges->TotalCharge->MonetaryValue))
+        {
+            return [
+                'status'        => 200,
+                'statusText'    => 'success',
+                'rate'          => (float) $rate->RateResponse->RatedShipment->NegotiatedRateCharges->TotalCharge->MonetaryValue
+            ];
+        }
+        elseif(isset($rate->Fault))
+        {
+            return [
+                'status'        => $rate->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Code,
+                'statusText'    => $rate->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description
+            ];
+        }
+        else
+        {
+            return [
+                'status'        => 500,
+                'statusText'    => 'UPS Internal Server Error, unknown error'
+            ];
+        }
     }
 
     private function checkSpecialCountryCode($countryId, $zip)

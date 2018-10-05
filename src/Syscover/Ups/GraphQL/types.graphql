@@ -1,0 +1,5 @@
+type UPSRate {
+    status: Int!
+    statusText: String!
+    rate: Float
+}

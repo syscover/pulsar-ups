@@ -4,37 +4,39 @@ use Syscover\Ups\Facades\Rate;
 
 class RateService
 {
-    public static function getRate(
-        $countryFrom,
-        $zipFrom,
-        $countryTo,
-        $zipTo,
-        $weight
-    )
+    public static function getRate($object)
     {
+        if(empty($object['ship_from_country'])) throw new \Exception('You have to define a ship_from_country field to get a UPS rate');
+        if(empty($object['ship_from_zip']))     throw new \Exception('You have to define a ship_from_zip field to create a UPS rate');
+        if(empty($object['ship_to_country']))   throw new \Exception('You have to define a ship_to_country field to create a UPS rate');
+        if(empty($object['ship_to_zip']))       throw new \Exception('You have to define a ship_to_zip field to create a UPS rate');
+        if(empty($object['weight']))            throw new \Exception('You have to define a weight field to create a UPS rate');
+
+        // set shipper values if not exist
+        if(empty($object['shipper_country']))   $object['shipper_country'] = $object['ship_from_country'];
+        if(empty($object['shipper_zip']))       $object['shipper_zip'] = $object['ship_from_zip'];
+
+        // get rate
         return Rate::addUpsSecurity()
             ->addRequest()
             ->addShipper(
-                $countryFrom,
-                $zipFrom
+                $object['shipper_country'],
+                $object['shipper_zip']
             )
             ->addShipFrom(
-                $countryFrom,
-                $zipFrom
+                $object['ship_from_country'],
+                $object['ship_from_zip']
             )
             ->addShipTo(
-                $countryTo,
-                $zipTo
+                $object['ship_to_country'],
+                $object['ship_to_zip']
             )
             ->addService()
             ->addPackage()
             ->addPackageWeight(
-                $weight
+                $object['weight']
             )
             ->addShipmentRatingOptions()
             ->send();
-
-        //return Rate::send();
-        //return json_encode(Rate::request());
     }
 }

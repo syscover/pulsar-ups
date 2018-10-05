@@ -4,19 +4,26 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Syscover\Ups\Services\RateService;
 
-
 class RateController extends BaseController
 {
-    public function index()
+    public function index(Request $request)
     {
-        $response = RateService::getRate(
-            'ES',
-            '28020',
-            'ES',
-            '28034',
-            '0.2'
-        );
+        try
+        {
+            $object = RateService::getRate($request->all());
+        }
+        catch (\Exception $e)
+        {
+            return response()->json([
+                'status'        => 500,
+                'statusText'    => $e->getMessage()
+            ], 500);
+        }
 
-        return response($response);
+        return response()->json([
+            'status'        => 200,
+            'statusText'    => 'success',
+            'data'          => $object
+        ]);
     }
 }

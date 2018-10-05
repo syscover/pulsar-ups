@@ -1,0 +1,9 @@
+input UPSRateInput {
+    ship_from_country: String!
+    ship_from_zip: String!
+    ship_to_country: String!
+    ship_to_zip: String!
+    weight: Float!
+    shipper_country: String
+    shipper_zip: String
+}

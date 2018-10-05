@@ -26,7 +26,7 @@ return [
         ]
     ],
 
-    // in case that a country only has any services availables
+    // in case that a country only has any services available
     'services' => [
         'IC' => [
             ['code' => '65',    'name' =>'UPS Express Saver',                  'saver' => true]
