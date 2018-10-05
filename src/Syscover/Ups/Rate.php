@@ -182,22 +182,23 @@ class Rate extends Ups
         {
             return [
                 'status'        => 200,
-                'statusText'    => 'success',
-                'rate'          => (float) $rate->RateResponse->RatedShipment->NegotiatedRateCharges->TotalCharge->MonetaryValue
+                'status_text'   => 'success',
+                'rate'          => (float) $rate->RateResponse->RatedShipment->NegotiatedRateCharges->TotalCharge->MonetaryValue,
+                'is_free'       => false
             ];
         }
         elseif(isset($rate->Fault))
         {
             return [
                 'status'        => $rate->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Code,
-                'statusText'    => $rate->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description
+                'status_text'   => $rate->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description
             ];
         }
         else
         {
             return [
                 'status'        => 500,
-                'statusText'    => 'UPS Internal Server Error, unknown error'
+                'status_text'   => 'UPS Internal Server Error, unknown error'
             ];
         }
     }

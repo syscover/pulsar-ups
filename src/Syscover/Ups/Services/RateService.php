@@ -1,5 +1,6 @@
 <?php namespace Syscover\Ups\Services;
 
+use Syscover\Market\Services\CatalogPriceRuleService;
 use Syscover\Ups\Facades\Rate;
 
 class RateService
@@ -15,6 +16,19 @@ class RateService
         // set shipper values if not exist
         if(empty($object['shipper_country']))   $object['shipper_country'] = $object['ship_from_country'];
         if(empty($object['shipper_zip']))       $object['shipper_zip'] = $object['ship_from_zip'];
+
+        // check catalog price rules to know if shipping is free
+        $response = CatalogPriceRuleService::checkFreeShipping($object);
+
+        if ($response['is_free'])
+        {
+            return [
+                'status'        => 200,
+                'status_text'   => 'success',
+                'rate'          => 0,
+                'is_free'       => true
+            ];
+        }
 
         // get rate
         return Rate::addUpsSecurity()
