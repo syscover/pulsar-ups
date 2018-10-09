@@ -4,6 +4,7 @@ input UPSRateInput {
     ship_to_country: String!
     ship_to_zip: String!
     weight: Float!
+    shipper_name: String
     shipper_country: String
     shipper_zip: String
 }
