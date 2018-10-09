@@ -1,10 +1,13 @@
 input UPSRateInput {
+    cart_instance: String
+    set_cart: Boolean
     ship_from_country: String!
     ship_from_zip: String!
     ship_to_country: String!
     ship_to_zip: String!
-    weight: Float!
     shipper_name: String
     shipper_country: String
     shipper_zip: String
+    weight: Float!
+
 }

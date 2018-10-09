@@ -1,28 +1,37 @@
 <?php namespace Syscover\Ups\Services;
 
 use Syscover\Market\Services\CatalogPriceRuleService;
+use Syscover\ShoppingCart\Facades\CartProvider;
 use Syscover\Ups\Facades\Rate;
 
 class RateService
 {
     public static function getRate($object)
     {
-        if(empty($object['ship_from_country'])) throw new \Exception('You have to define a ship_from_country field to get a UPS rate');
-        if(empty($object['ship_from_zip']))     throw new \Exception('You have to define a ship_from_zip field to create a UPS rate');
-        if(empty($object['ship_to_country']))   throw new \Exception('You have to define a ship_to_country field to create a UPS rate');
-        if(empty($object['ship_to_zip']))       throw new \Exception('You have to define a ship_to_zip field to create a UPS rate');
-        if(empty($object['weight']))            throw new \Exception('You have to define a weight field to create a UPS rate');
+        if(empty($object['ship_from_country']))         throw new \Exception('You have to define a ship_from_country field to get a UPS rate');
+        if(empty($object['ship_from_zip']))             throw new \Exception('You have to define a ship_from_zip field to create a UPS rate');
+        if(empty($object['ship_to_country']))           throw new \Exception('You have to define a ship_to_country field to create a UPS rate');
+        if(empty($object['ship_to_zip']))               throw new \Exception('You have to define a ship_to_zip field to create a UPS rate');
+        if(empty($object['weight']))                    throw new \Exception('You have to define a weight field to create a UPS rate');
 
         // set shipper values if not exist
-        if(empty($object['shipper_country']))   $object['shipper_country'] = $object['ship_from_country'];
-        if(empty($object['shipper_zip']))       $object['shipper_zip'] = $object['ship_from_zip'];
-        if(empty($object['shipper_name']))      $object['shipper_name'] = null;
+        if(empty($object['shipper_country']))           $object['shipper_country'] = $object['ship_from_country'];
+        if(empty($object['shipper_zip']))               $object['shipper_zip'] = $object['ship_from_zip'];
+        if(empty($object['shipper_name']))              $object['shipper_name'] = null;
+        if(empty($object['set_cart']))                  $object['set_cart'] = false;
+        if(empty($object['cart_instance']))             $object['cart_instance'] = 'default';
 
         // check catalog price rules to know if shipping is free
-        $response = CatalogPriceRuleService::checkFreeShipping($object);
+        $catalogPriceRuleResponse = CatalogPriceRuleService::checkFreeShipping($object);
 
-        if ($response['is_free'])
+        if ($catalogPriceRuleResponse['is_free'])
         {
+            // set car value shipping rate
+            if($object['set_cart'])
+            {
+                CartProvider::instance($object['cart_instance'])->shippingAmount = 0;
+            }
+
             return [
                 'status'        => 200,
                 'status_text'   => 'success',
@@ -32,7 +41,7 @@ class RateService
         }
 
         // get rate
-        return Rate::addUpsSecurity()
+        $upsResponse =  Rate::addUpsSecurity()
             ->addRequest()
             ->addShipper(
                 $object['shipper_country'],
@@ -54,5 +63,13 @@ class RateService
             )
             ->addShipmentRatingOptions()
             ->send();
+
+        // set car value shipping rate
+        if($object['set_cart'])
+        {
+            CartProvider::instance($object['cart_instance'])->shippingAmount = $upsResponse['rate'];
+        }
+
+        return $upsResponse;
     }
 }
