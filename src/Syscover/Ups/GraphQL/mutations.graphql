@@ -1,0 +1,3 @@
+# Rate
+""" Query to get rate """
+upsUpdateRate(payload:UPSRateInput!): UPSRate @field(resolver: "Syscover\\Ups\\GraphQL\\Services\\RateGraphQLService@resolveRate")
