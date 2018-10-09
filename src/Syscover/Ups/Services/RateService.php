@@ -16,6 +16,7 @@ class RateService
         // set shipper values if not exist
         if(empty($object['shipper_country']))   $object['shipper_country'] = $object['ship_from_country'];
         if(empty($object['shipper_zip']))       $object['shipper_zip'] = $object['ship_from_zip'];
+        if(empty($object['shipper_name']))      $object['shipper_name'] = null;
 
         // check catalog price rules to know if shipping is free
         $response = CatalogPriceRuleService::checkFreeShipping($object);
@@ -35,7 +36,8 @@ class RateService
             ->addRequest()
             ->addShipper(
                 $object['shipper_country'],
-                $object['shipper_zip']
+                $object['shipper_zip'],
+                $object['shipper_name']
             )
             ->addShipFrom(
                 $object['ship_from_country'],

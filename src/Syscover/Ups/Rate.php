@@ -1,5 +1,6 @@
 <?php namespace Syscover\Ups;
 
+use Illuminate\Support\Facades\Log;
 use Syscover\Ups\Entities\PackagingType;
 use Syscover\Ups\Entities\Service;
 use Syscover\Ups\Entities\UnitOfMeasurement;
@@ -134,7 +135,7 @@ class Rate extends Ups
     {
         $this->request['RateRequest']['Shipment']['Package']['PackageWeight']['UnitOfMeasurement']['Code'] = $code;
         //$this->request['RateRequest']['Shipment']['Package']['PackageWeight']['UnitOfMeasurement']['Description'] = 'Kilos';
-        $this->request['RateRequest']['Shipment']['Package']['PackageWeight']['Weight'] = $weight;
+        $this->request['RateRequest']['Shipment']['Package']['PackageWeight']['Weight'] = (string) $weight;
 
         return $this;
     }
@@ -189,6 +190,14 @@ class Rate extends Ups
         }
         elseif(isset($rate->Fault))
         {
+            Log::error(
+                'Syscover\Ups\Rate::send error with parameters',
+                [
+                    'status'        => $rate->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Code,
+                    'status_text'   => $rate->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description,
+                    'request'       => $this->request
+                ]);
+
             return [
                 'status'        => $rate->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Code,
                 'status_text'   => $rate->Fault->detail->Errors->ErrorDetail->PrimaryErrorCode->Description
