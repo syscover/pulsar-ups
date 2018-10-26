@@ -15,3 +15,16 @@ composer require syscover/pulsar-ups
 ```
 php artisan vendor:publish --provider="Syscover\Ups\UpsServiceProvider"
 ```
+
+**3 - Add graphQL routes to routes/graphql/schema.graphql file**
+```
+# Ups types
+#import ./../../vendor/syscover/pulsar-ups/src/Syscover/Ups/GraphQL/inputs.graphql
+#import ./../../vendor/syscover/pulsar-ups/src/Syscover/Ups/GraphQL/types.graphql
+
+# Ups queries
+#import ./../../vendor/syscover/pulsar-ups/src/Syscover/Ups/GraphQL/queries.graphql
+
+# Ups mutations
+#import ./../../vendor/syscover/pulsar-ups/src/Syscover/Ups/GraphQL/mutations.graphql
+```
