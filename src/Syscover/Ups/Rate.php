@@ -33,14 +33,7 @@ class Rate extends Ups
     {
         parent::__construct($user, $password, $accessKey);
 
-        if($shipperNumber)
-        {
-            $this->shipperNumber = $shipperNumber;
-        }
-        else
-        {
-            $this->shipperNumber = $user;
-        }
+        $this->shipperNumber = $shipperNumber ? $shipperNumber : $user;
     }
 
     public function addUpsSecurity()
