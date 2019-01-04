@@ -1,5 +1,7 @@
 <?php namespace Syscover\Ups;
 
+use Illuminate\Support\Facades\Log;
+
 abstract class Ups
 {
     const PRODUCTION_ENDPOINT = 'https://onlinetools.ups.com/';
@@ -29,5 +31,13 @@ abstract class Ups
         $this->user = $user;
         $this->password = $password;
         $this->accessKey = $accessKey;
+    }
+
+    public function alerts(array $alerts, string $origin)
+    {
+        foreach ($alerts as $alert)
+        {
+            Log::alert('UPS ' . $origin . ' - ' .$alert->Code . ': ' . $alert->Description);
+        }
     }
 }

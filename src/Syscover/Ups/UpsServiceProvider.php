@@ -42,7 +42,8 @@ class UpsServiceProvider extends ServiceProvider
             return new Rate(
                 config('pulsar-ups.user'),
                 config('pulsar-ups.password'),
-                config('pulsar-ups.access_key')
+                config('pulsar-ups.access_key'),
+                config('pulsar-ups.shipper_number')
             );
         });
     }

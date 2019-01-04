@@ -15,6 +15,11 @@ class Rate extends Ups
     private $request = [];
 
     /**
+     * @var string
+     */
+    protected $shipperNumber;
+
+    /**
      * @var bool
      */
     private $debug = false;
@@ -22,10 +27,13 @@ class Rate extends Ups
     public function __construct(
         string $user,
         string $password,
-        string $accessKey
+        string $accessKey,
+        string $shipperNumber = null
     )
     {
         parent::__construct($user, $password, $accessKey);
+
+        if(! $shipperNumber) $this->shipperNumber = $user;
     }
 
     public function addUpsSecurity()
@@ -54,7 +62,7 @@ class Rate extends Ups
         $stateProvinceCode = null
     )
     {
-                                            $this->request['RateRequest']['Shipment']['Shipper']['ShipperNumber'] = $this->user;
+                                            $this->request['RateRequest']['Shipment']['Shipper']['ShipperNumber'] = $this->shipperNumber;
         if($name)                           $this->request['RateRequest']['Shipment']['Shipper']['Name'] = $name;
         if($address)                        $this->request['RateRequest']['Shipment']['Shipper']['Address']['AddressLine'] = [$address];
         if($city)                           $this->request['RateRequest']['Shipment']['Shipper']['Address']['City'] = $city;
@@ -178,6 +186,10 @@ class Rate extends Ups
 
         // parse string to object
         $rate = json_decode($rate);
+
+        // register alerts
+        if(is_array($rate->RateResponse->Response->Alert)) $this->alerts($rate->RateResponse->Response->Alert, 'Response');
+        if(is_array($rate->RateResponse->RatedShipment->RatedShipmentAlert)) $this->alerts($rate->RateResponse->RatedShipment->RatedShipmentAlert, 'RatedShipment');
 
         if(isset($rate->RateResponse->RatedShipment->NegotiatedRateCharges->TotalCharge->MonetaryValue))
         {
