@@ -4,7 +4,7 @@ use Syscover\Ups\Services\RateService;
 
 class RateGraphQLService
 {
-    protected $serviceClassName = RateService::class;
+    protected $service = RateService::class;
 
     public function resolveRate($root, array $args)
     {
