@@ -9,5 +9,5 @@ input UPSRateInput {
     shipper_country: String
     shipper_zip: String
     weight: Float!
-
+    tax: Float
 }

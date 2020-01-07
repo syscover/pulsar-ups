@@ -64,6 +64,12 @@ class RateService
             ->addShipmentRatingOptions()
             ->send();
 
+        // calculate tax rate, by default 21%
+        $upsResponse['tax']         = $object['tax'] ?? 21;
+        $upsResponse['tax']         = (($upsResponse['tax'] + 100 )/ 100);
+        $upsResponse['base_rate']   = $upsResponse['rate'];
+        $upsResponse['rate']        = $upsResponse['rate'] * $tax;
+
         // set car value shipping rate
         if($object['set_cart'])
         {

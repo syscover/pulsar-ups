@@ -1,6 +1,8 @@
 type UPSRate {
     status: Int!
     status_text: String!
+    tax: Float!
+    base_rate: Float
     rate: Float
     is_free: Boolean
 }
