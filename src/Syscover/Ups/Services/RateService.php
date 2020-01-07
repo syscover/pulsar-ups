@@ -68,7 +68,7 @@ class RateService
         $upsResponse['tax']         = $object['tax'] ?? 21;
         $upsResponse['tax']         = (($upsResponse['tax'] + 100 )/ 100);
         $upsResponse['base_rate']   = $upsResponse['rate'];
-        $upsResponse['rate']        = $upsResponse['rate'] * $tax;
+        $upsResponse['rate']        = self::roundUp($upsResponse['rate'] * $upsResponse['tax'], 2);
 
         // set car value shipping rate
         if($object['set_cart'])
@@ -77,5 +77,11 @@ class RateService
         }
 
         return $upsResponse;
+    }
+
+    private static function roundUp($number, $precision = 2)
+    {
+        $fig = pow(10, $precision);
+        return (ceil($number * $fig) / $fig);
     }
 }
