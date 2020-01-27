@@ -1,5 +1,6 @@
 <?php namespace Syscover\Ups\Services;
 
+use Syscover\Core\Support\Number;
 use Syscover\Market\Services\CatalogPriceRuleService;
 use Syscover\ShoppingCart\Facades\CartProvider;
 use Syscover\Ups\Facades\Rate;
@@ -68,7 +69,7 @@ class RateService
         $upsResponse['tax']         = $object['tax'] ?? 21;
         $upsResponse['tax']         = (($upsResponse['tax'] + 100 )/ 100);
         $upsResponse['base_rate']   = $upsResponse['rate'];
-        $upsResponse['rate']        = self::roundUp($upsResponse['rate'] * $upsResponse['tax'], 2);
+        $upsResponse['rate']        = Number::roundUp($upsResponse['rate'] * $upsResponse['tax'], 2);
 
         // set car value shipping rate
         if($object['set_cart'])
@@ -77,11 +78,5 @@ class RateService
         }
 
         return $upsResponse;
-    }
-
-    private static function roundUp($number, $precision = 2)
-    {
-        $fig = pow(10, $precision);
-        return (ceil($number * $fig) / $fig);
     }
 }
